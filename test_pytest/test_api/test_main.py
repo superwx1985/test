@@ -1,27 +1,20 @@
-import uuid
 import pytest
 import requests
 import tempfile
+from test_data import TestData
 
 
-domain = '127.0.0.1:8080'
-users = [
-    {"name": "abc", "pwd": "123", "status_code": 200, "msg": "Log Out"},
-    {"name": "vic", "pwd": "123", "status_code": 200, "msg": "Incorrect password."}
-]
-
-
-def test_register():
+def test_register(domain):
     username = "abc"
     password = "123"
     path = "auth/register"
-    url = f"http://{domain}/{path}"
+    # url = f"http://{domain}/{path}"
+    url = f"http://{TestData.domain}/{path}"
     res = requests.request(method="POST", url=url, data={'username': username, 'password': password})
     assert 200 == res.status_code
 
 
-@pytest.mark.parametrize("user", users)
-def test_login(user):
+def test_login(domain, user):
     username = user["name"]
     password = user["pwd"]
     path = "auth/login"
@@ -33,15 +26,16 @@ def test_login(user):
     if user["msg"] == "Log Out":
         cookie = session.cookies
         assert cookie
-        user["cookie"] = cookie
+        # user["cookie"] = cookie
+        user["session"] = session
     else:
         assert not res.request.headers.get("cookie")
 
 
-@pytest.mark.parametrize("user", users)
-def test_file_upload(user):
-    cookie = user.get("cookie")
-    if cookie:
+def test_file_upload(domain, user):
+    # cookie = user.get("cookie")
+    session = user.get("session")
+    if session:
         path = "file/file_upload"
         url = f"http://{domain}/{path}"
 
@@ -51,8 +45,8 @@ def test_file_upload(user):
         data = {
             "file": f
         }
-        session = requests.session()
-        session.cookies = cookie
+        # session = requests.session()
+        # session.cookies = cookie
         res = session.request(method="POST", url=url, files=data)
         assert 200 == res.status_code
         assert filename in res.url

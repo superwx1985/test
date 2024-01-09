@@ -7,3 +7,4 @@ pytest-ordering
 pytest-rerunfailures
 allure-pytest
 requests~=2.31.0
+jsonpath==0.82.2
