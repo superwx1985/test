@@ -54,5 +54,5 @@ def test_file_upload(domain, user):
 
 if __name__ == '__main__':
     # pytest.main([f'{__file__}::test_file_upload'])
-    pytest.main([f'{__file__}'])
+    pytest.main([__file__, '-v'])
     pass
