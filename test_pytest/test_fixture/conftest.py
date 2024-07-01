@@ -24,3 +24,10 @@ def my_fixture2(request):
 def my_fixture3(request):
     print("\n=== my_fixture3")
     return request.param
+
+
+# 全局变量，范围是class
+@pytest.fixture(scope="class")
+def global_variable():
+    my_dict = {}
+    yield my_dict

@@ -1,4 +1,7 @@
 # 模块中的方法
+import pytest
+
+
 def setup_module():
     print("setup_module：整个.py模块只执行一次")
 
@@ -66,3 +69,6 @@ class TestCase2:
     def test_six(self):
         assert True
 
+
+if __name__ == '__main__':
+    pytest.main([__file__, '-vs'])
